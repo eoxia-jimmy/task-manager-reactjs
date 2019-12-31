@@ -1,12 +1,119 @@
+@font-face {
+  font-family: "whitney";
+  src: url("./whitney/whitney-medium.otf") format("opentype"),
+}
+
+html, body {
+  overflow: hidden!important;
+
+}
+
 body {
   background-color: #2f3136;
   color: #444;
   width: 100%;
   height: 100%;
+  font-family: whitney, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+input {
+  color: #2f3136;
+background: transparent;
+border-bottom-color: #f0f0f0;
+margin-top: 12px;
+padding-left: 4px;
+padding-right: 4px;
+border-radius: 0;
+border-width: 0 0 2px;
+border-bottom-style: solid;
+font-size: 16px;
+font-weight: 500;
+width: 100%;
+padding: 2px;
+    height: 40px;
+        outline: 0;
+        margin-bottom: 20px;
+}
+
+label {
+  font-size: 11px;
+font-weight: 700;
+text-transform: uppercase;
+display: block;
+margin: 0;
+padding: 0;
+border: 0;
+    color: #87909c;
+}
+
+.align-right {
+  text-align: right;
+}
+
+button {
+  color: #fff;
+    background-color: #7289da;
+    height: 38px;
+    min-width: 96px;
+    min-height: 38px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16px;
+    padding: 2px 6px;
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 .App {
   height: 100%;
+}
+
+.modal-background {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  height: 100%;
+  width: 100%;
+}
+
+.modal {
+  width: 60%;
+  min-height: 50%;
+  background-color: #fff;
+  border-radius: 5px 5px 5px 5px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+}
+
+.modal-content {
+  color: #99aab5;
+}
+
+.modal-content .description {
+  font-size: 18px;
+  text-align: center;
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 0;
+  margin-bottom: 15px;
+}
+
+.modal-header {
+  color: #7289da;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  padding: 0;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .header {
@@ -18,6 +125,10 @@ body {
 .header .logo {
   width: 98%;
   color: #72767d;
+}
+
+.header .action .fa-times:hover {
+  cursor: pointer;
 }
 
 .servers {
