@@ -1,0 +1,121 @@
+body {
+  background-color: #2f3136;
+  color: #444;
+  width: 100%;
+  height: 100%;
+}
+
+.App {
+  height: 100%;
+}
+
+.header {
+  height: 18px;
+  display: flex;
+  padding: 5px;
+}
+
+.header .logo {
+  width: 98%;
+  color: #72767d;
+}
+
+.servers {
+  width: 100%;
+  text-align: center;
+  margin: auto;
+}
+
+.server {
+  width: 48px;
+  height: 48px;
+  margin: auto;
+  margin-bottom: 15px;
+}
+
+.server.add {
+  background-color: #36393f;
+  border-radius: 26px;
+}
+
+.server.add svg {
+  font-size: 1.2em;
+  margin-top: 13px;
+  color: white;
+}
+
+.server:hover {
+  cursor: pointer;
+}
+
+.server img {
+  width: 100%;
+  height: 100%;
+}
+
+nav {
+  width: 72px;
+  float: left;
+}
+
+.wrap {
+  display: grid;
+  border-radius: 8px 0 0;
+  background-color: #36393f;
+  padding: 0.5em 0.5em;
+}
+
+.task {
+  margin: 10px;
+  background: #202225;
+  box-shadow: 1px 1px 5px 0 rgba(0,0,0,0.2);
+  color: white;
+}
+
+.task:nth-child(odd) {
+  grid-column: 1;
+}
+
+.task:nth-child(even) {
+  grid-column: 2;
+}
+
+.task-header {
+  padding: 0.8em 0.8em;
+}
+
+.task-header .task-title {
+  margin: auto 0;
+}
+
+.task-header .task-title > div {
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.point {
+  margin: 0.2em 0;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background-color: #2f3136;
+}
+
+.point .point-container {
+  display: flex;
+  flex-direction: row;
+  padding: 0.6em 0;
+}
+
+.point .point-container .point-valid {
+  margin: auto 0;
+  padding-left: 0.2em;
+  display: flex;
+  flex-direction: row;
+}
+
+.point .point-container .point-content {
+  width: 100%;
+  max-width: 90%;
+  margin: auto 0;
+  padding: 0 1em;
+}
