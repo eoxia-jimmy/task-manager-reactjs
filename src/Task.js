@@ -21,7 +21,7 @@ class Task extends React.Component {
     form.append('id', this.props.data.id);
     form.append('title', evt.target.value);
 
-    fetch("http://127.0.0.1/wordpress/wp-json/task_manager/v1/task/" + this.props.data.id, {
+    fetch(this.props.url + "wp-json/task_manager/v1/task/" + this.props.data.id, {
       method: 'POST',
       body: form,
       mode: 'cors'
@@ -54,7 +54,7 @@ class Task extends React.Component {
 
             </ul>
 
-            <Points id={data.id}></Points>
+            <Points id={data.id} url={this.props.url}></Points>
 
           </div>
         </div>

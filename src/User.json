@@ -1,0 +1,20 @@
+{
+  "name": "Laygen",
+  "servers": [
+    {
+      "id": 0,
+      "url": "/",
+      "name": "Home"
+    },
+    {
+      "id": 1,
+      "url": "http://127.0.0.1/wordpress/",
+      "name": "Eoxia"
+    },
+    {
+      "id": 2,
+      "url": "http://127.0.0.1/wp2/",
+      "name": "Evarisk"
+    }
+  ]
+}

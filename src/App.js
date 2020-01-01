@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import logo from './logo.svg';
 import './reset.css';
 import './App.css';
-import Tasks from './Tasks';
 import Servers from './Servers';
+import Home from './Home';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -13,6 +13,14 @@ const electron = window.require("electron")
 
 function CloseApp() {
   electron.remote.getCurrentWindow().close();
+}
+
+var id = 0;
+var url = "";
+var home = React.createRef();
+
+function Switch(idToSwitch, urlToSwitch, name) {
+  home.current.load(idToSwitch, urlToSwitch, name);
 }
 
 function App() {
@@ -29,9 +37,11 @@ function App() {
           </ul>
         </div>
       </div>
-      <Servers></Servers>
+      <Servers switch={Switch}></Servers>
 
-      <Tasks></Tasks>
+      <div className="wrap">
+        <Home ref={home}></Home>
+      </div>
     </div>
   );
 }

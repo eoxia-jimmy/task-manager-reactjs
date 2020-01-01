@@ -4,15 +4,27 @@ class Modal extends React.Component {
   constructor(props) {
     super(props);
 
-    this.style = {
+    this.state = {
       display: "none"
     };
   }
 
+  openModal = () => {
+    this.setState({display: "block"})
+  };
+
+  closeModal = (e) => {
+    this.setState({display: "none"})
+  }
+
+  preventCloseModal = (e) => {
+    e.stopPropagation();
+  }
+
   render() {
      return (
-       <div className="modal-background" style={this.style}>
-        <div className="modal">
+       <div className="modal-background" onClick={this.closeModal} style={this.state}>
+        <div className="modal" onClick={this.preventCloseModal}>
           <div className="modal-header">
             <h2>Oh, un autre serveur, hein?</h2>
           </div>
@@ -20,12 +32,12 @@ class Modal extends React.Component {
             <p className="description">Pour rejoindre un serveur, veuillez renseigner l'URL du serveur et la clé privée assigné à votre compte utilisateur.</p>
             <form>
               <div className="form-element">
-                <label for="private-key">URL du site</label>
+                <label htmlFor="private-key">URL du site</label>
                 <input type="text" />
               </div>
 
               <div className="form-element">
-                <label for="private-key">Votre clé privée</label>
+                <label htmlFor="private-key">Votre clé privée</label>
                 <input type="text" />
               </div>
 

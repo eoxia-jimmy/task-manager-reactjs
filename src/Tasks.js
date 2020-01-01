@@ -8,15 +8,20 @@ class Tasks extends React.Component {
       error: null,
       isLoaded: false,
       items: [],
-      html: 'test'
+      html: 'test',
     };
   }
 
   componentDidMount() {
-    fetch("http://127.0.0.1/wordpress/wp-json/task_manager/v1/task")
+    this.load();
+  }
+
+  load() {
+    fetch(this.props.url + "wp-json/task_manager/v1/task")
       .then(res => res.json())
       .then(
         (result) => {
+          console.log(result);
           if (!Array.isArray(result)) {
             result = [result];
           }
@@ -42,9 +47,9 @@ class Tasks extends React.Component {
        return <div>Chargement…</div>;
      } else {
        return (
-         <div className="wrap">
+         <div className="tasks">
           {items.map((item, key) => (
-            <Task key={item.data.id} data={item.data}></Task>
+            <Task key={item.data.id} data={item.data} url={this.props.url}></Task>
           ))}
           </div>
        );

@@ -24,7 +24,7 @@ class Points extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://127.0.0.1/wordpress/wp-json/task_manager/v1/points/" + this.props.id)
+    fetch(this.props.url + "wp-json/task_manager/v1/points/" + this.props.id)
       .then(res => res.json())
       .then(
         (result) => {
@@ -72,7 +72,7 @@ class Points extends React.Component {
       form.append('id', html[key]['id']);
       form.append('content', evt.target.value);
 
-      fetch("http://127.0.0.1/wordpress/wp-json/task_manager/v1/point/" + html[key]['id'], {
+      fetch(this.props.url + "wp-json/task_manager/v1/point/" + html[key]['id'], {
         method: 'POST',
         body: form,
         mode: 'cors'
@@ -92,7 +92,7 @@ class Points extends React.Component {
     form.append('post_id', this.props.id);
     form.append('content', html.new.content);
 
-    fetch("http://127.0.0.1/wordpress/wp-json/task_manager/v1/point/", {
+    fetch(this.props.url + "wp-json/task_manager/v1/point/", {
       method: 'POST',
       body: form,
       mode: 'cors'
