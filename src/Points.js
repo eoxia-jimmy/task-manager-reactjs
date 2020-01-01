@@ -43,11 +43,28 @@ class Points extends React.Component {
             this.contentEditable['content-' + item.data.id] = React.createRef();
           });
 
-          this.setState({
-            isLoaded: true,
-            items: result,
-            html: html
-          });
+          if (result == null) {
+            this.setState({
+              isLoaded: true,
+              items: []
+            });
+            return null;
+          } else {
+
+            if (result.length == 0) {
+              this.setState({
+                isLoaded: true
+              });
+            } else {
+
+              this.setState({
+                isLoaded: true,
+                items: result != null ? result : [],
+                html: html
+              });
+              return;
+            }
+          }
         },
         // Remarque : il est important de traiter les erreurs ici
         // au lieu d'utiliser un bloc catch(), pour ne pas passer à la trappe
@@ -123,7 +140,7 @@ class Points extends React.Component {
        return <div>Erreur : {error.message}</div>;
      } else if (!isLoaded) {
        return <div>Chargement…</div>;
-     } else if (items.length > 0) {
+     } else {
        return (
          <div className="points">
           <div className="point new">

@@ -16,6 +16,22 @@ class Tasks extends React.Component {
     this.load();
   }
 
+  createTask() {
+    const form = new FormData();
+    form.append('title', 'New Task');
+
+    fetch(this.props.url + "wp-json/task_manager/v1/task/", {
+      method: 'POST',
+      body: form,
+      mode: 'cors'
+    })
+    .then(res => res.json())
+    .then(
+      (result) => {
+        console.log(result);
+      });
+  }
+
   load() {
     fetch(this.props.url + "wp-json/task_manager/v1/task")
       .then(res => res.json())
