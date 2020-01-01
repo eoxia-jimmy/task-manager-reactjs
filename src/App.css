@@ -279,3 +279,52 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=rgba(4, 4, 5, 0.2), Direct
   margin: auto 0;
   padding: 0 1em;
 }
+
+.points .point .comments {
+    padding: 0 1.4em;
+}
+
+.points .point .comments .comment {
+    display: flex;
+    margin: 0.8em 0;
+}
+
+.tm-avatar {
+  width: 40px;
+height: 40px;
+box-shadow: 0 0 0px 4px #fff;
+    min-width: 40px;
+    margin-top: auto;
+margin-right: 4px;
+margin-bottom: 3px;
+border-radius: 50%;
+overflow: hidden;
+z-index: 1;
+    background: #0084ff;
+}
+
+
+.points .point .comments .comment .comment-container {
+    width: 100%;
+    display: flex;
+flex-direction: row;
+padding: 1em;
+background: rgba(0,0,0,0.1);
+border-radius: 8px;
+border-bottom-left-radius: 0;
+position: relative;
+}
+
+.points .point .comment .comment-content {
+    width: 100%;
+    max-width: 90%;
+}
+
+.points .point .comment .comment-content .comment-content-text {
+    transition: all 0.2s ease-out;
+    width: 100%;
+    font-size: 14px;
+    position: relative;
+    line-height: 1.5;
+    color: white;
+}

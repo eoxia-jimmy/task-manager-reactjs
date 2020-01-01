@@ -2,24 +2,22 @@ import React from 'react';
 import ContentEditable from 'react-contenteditable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusCircle, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
-import Comments from './Comments';
 
-class Points extends React.Component {
+class Comments extends React.Component {
   constructor(props) {
     super(props);
     this.contentEditable = {
       new: React.createRef()
     };
 
-    this.comment = React.createRef();
-
     this.state = {
       error: null,
       isLoaded: false,
       items: [],
+      display: 'none',
       html: {
         new: {
-          content: "New Point",
+          content: "New Comments",
           id: 0,
         }
       }
@@ -27,7 +25,7 @@ class Points extends React.Component {
   }
 
   componentDidMount() {
-    fetch(this.props.url + "wp-json/task_manager/v1/points/" + this.props.id)
+    fetch(this.props.url + "wp-json/task_manager/v1/comments/" + this.props.parent_id)
       .then(res => res.json())
       .then(
         (result) => {
@@ -92,7 +90,7 @@ class Points extends React.Component {
       form.append('id', html[key]['id']);
       form.append('content', evt.target.value);
 
-      fetch(this.props.url + "wp-json/task_manager/v1/point/" + html[key]['id'], {
+      fetch(this.props.url + "wp-json/task_manager/v1/comment/" + html[key]['id'], {
         method: 'POST',
         body: form,
         mode: 'cors'
@@ -109,10 +107,11 @@ class Points extends React.Component {
     var html = this.state.html;
 
     const form = new FormData();
-    form.append('post_id', this.props.id);
+    form.append('post_id', this.props.parent_id);
+    form.append('parent_id', this.props.id);
     form.append('content', html.new.content);
 
-    fetch(this.props.url + "wp-json/task_manager/v1/point/", {
+    fetch(this.props.url + "wp-json/task_manager/v1/comment/", {
       method: 'POST',
       body: form,
       mode: 'cors'
@@ -137,8 +136,8 @@ class Points extends React.Component {
       });
   };
 
-  openComment = evt => {
-    this.comment.current.display();
+  display() {
+    this.setState({display: "block"});
   }
 
   render() {
@@ -149,54 +148,58 @@ class Points extends React.Component {
        return <div>Chargement…</div>;
      } else {
        return (
-         <div className="points">
-          <div className="point new">
-          <ul className="point-container">
-            <li className="point-valid">
-            <input type="checkbox" />
-            </li>
-            <li className="point-content">
-              <ContentEditable
-                ref="pointnew"
-                innerRef={this.contentEditable.new}
-                html={this.state.html.new.content} // innerHTML of the editable div
-                disabled={false}       // use true to disable editing
-                onChange={this.handleChange.bind(this, 'new')} // handle innerHTML change
-                tagName='div' />
-              </li>
-              <li className="point-action">
-                <FontAwesomeIcon icon={faPlusCircle} onClick={this.createPoint} />
-              </li>
-            </ul>
+         <ul className="comments" style={this.state}>
+          <li className="comment new">
+          <div className="tm-avatar wpeo-tooltip-event" aria-label="a">
+            <img className="avatar avatar-40" src="http://1.gravatar.com/avatar/d10ca8d11301c2f4993ac2279ce4b930?s=40&amp;d=blank&amp;r=g" />
+            <div className="wpeo-avatar-initial"><span>a</span></div>
           </div>
-          {items.map((item, key) => (
-            <div className="point" key={item.data.id}>
-              <ul className="point-container">
-                <li className="point-valid">
-                {item.data.id}
-                
-                <input type="checkbox" /></li>
-                <li className="point-content" onClick={this.openComment}>
-                  <ContentEditable
-                    ref="content-{item.data.id}"
-                    innerRef={this.contentEditable["content-" + item.data.id]}
-                    html={this.state.html["content-" + item.data.id].content} // innerHTML of the editable div
-                    disabled={false}       // use true to disable editing
-                    onChange={this.handleChange.bind(this, "content-" + item.data.id)} // handle innerHTML change
-                    tagName='div' />
-                </li>
-                <li className="point-action">
-                  <FontAwesomeIcon icon={faEllipsisV} />
-                </li>
-              </ul>
 
-              <Comments ref={this.comment} url={this.props.url} parent_id={this.props.id} id={item.data.id}></Comments>
-            </div>
+          <div className="comment-container">
+        		<div className="comment-content">
+        			<div className="comment-content-text">
+                <ContentEditable
+                  ref="pointnew"
+                  innerRef={this.contentEditable.new}
+                  html={this.state.html.new.content} // innerHTML of the editable div
+                  disabled={false}       // use true to disable editing
+                  onChange={this.handleChange.bind(this, 'new')} // handle innerHTML change
+                  tagName='div' />
+        			</div>
+        		</div>
+
+        		<div className="comment-action">
+        			<div className="fa-layers fa-fw save-icon wpeo-button button-rounded button-square-30 tm_register_comment">
+        				<FontAwesomeIcon icon={faPlusCircle} onClick={this.createPoint} />
+        			</div>
+        		</div>
+        	</div>
+          </li>
+          {items.map((item, key) => (
+            <li className="comment" key={item.data.id}>
+              <div className="tm-avatar wpeo-tooltip-event" aria-label="a">
+                <img className="avatar avatar-40" src="http://1.gravatar.com/avatar/d10ca8d11301c2f4993ac2279ce4b930?s=40&amp;d=blank&amp;r=g" />
+                <div className="wpeo-avatar-initial"><span>a</span></div>
+              </div>
+              <div className="comment-container">
+            		<div className="comment-content">
+            			<div className="comment-content-text">
+            				<div>{item.data.content}</div>
+            			</div>
+            		</div>
+
+            		<div className="comment-action">
+            			<div className="fa-layers fa-fw save-icon wpeo-button button-rounded button-square-30 tm_register_comment">
+            				<FontAwesomeIcon icon={faEllipsisV} onClick={this.createPoint} />
+            			</div>
+            		</div>
+            	</div>
+            </li>
           ))}
-          </div>
+          </ul>
        );
      }
   }
 }
 
-export default Points;
+export default Comments;
