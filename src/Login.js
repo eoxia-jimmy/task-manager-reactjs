@@ -14,10 +14,6 @@ class Login extends React.Component {
     this.setState({display: "block"})
   };
 
-  closeModal = (e) => {
-    this.setState({display: "none"})
-  }
-
   preventCloseModal = (e) => {
     e.stopPropagation();
   }
@@ -36,10 +32,10 @@ class Login extends React.Component {
     .then(res => res.json())
     .then(
       (result) => {
-        this.props.setLoginID(10);
         if (!result) {
           this.setState({errorMessage: "Identifiant erronée"});
         } else {
+          this.props.parent.setLoginID(result.id);
 
         }
       });
@@ -47,9 +43,13 @@ class Login extends React.Component {
       return false;
   }
 
+  goSubscribe = (e) => {
+    this.props.parent.subscribe();
+  }
+
   render() {
      return (
-       <div className="modal-background" onClick={this.closeModal} style={this.state}>
+       <div className="modal-background" style={this.state}>
         <div className="modal" onClick={this.preventCloseModal}>
           <div className="modal-header">
             <h2>Un nouveau ? Ou bien un vétéran ?</h2>
@@ -68,7 +68,7 @@ class Login extends React.Component {
 
               <div className="form-element">
                 <label htmlFor="private-key">Mot de passe</label>
-                <input type="text" value={this.state.password} ref="password" />
+                <input type="password" value={this.state.password} ref="password" />
               </div>
 
               <div className="align-right">
@@ -77,7 +77,7 @@ class Login extends React.Component {
             </form>
           </div>
           <div className="modal-footer">
-            <p>Besoin d'un compte ? S'inscrire</p>
+            <p>Besoin d'un compte ? <a href="#" onClick={this.goSubscribe}>S'inscrire</a></p>
           </div>
         </div>
       </div>

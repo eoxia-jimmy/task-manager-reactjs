@@ -6,60 +6,84 @@ import './App.css';
 import Servers from './Servers';
 import Home from './Home';
 import Login from './Login';
+import Subscribe from './Subscribe';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 const electron = window.require("electron")
+var remote = electron.remote
 
-function CloseApp() {
-  electron.remote.getCurrentWindow().close();
-}
+class App extends React.Component {
+  constructor(props) {
+    super(props);
 
-var id = 0;
-var url = "";
-var home = React.createRef();
-var loginID = 0;
+    this.home = React.createRef();
 
-function Switch(idToSwitch, urlToSwitch, name) {
-  home.current.load(idToSwitch, urlToSwitch, name);
-}
+    this.state = {
+      loginID: 0,
+      login: true
+    };
+  }
 
-function SetLoginID(id) {
-  loginID = id;
-}
+  closeApp() {
+    electron.remote.getCurrentWindow().close();
+  }
 
-function App() {
-  return (
-    <div className="App">
-      <div className="header">
-        <div className="logo">
-          Task Manager
+  switch(id, url, name) {
+    this.home.current.load(id, url, name);
+  }
+
+  setLoginID(id) {
+    this.setState({loginID: id});
+  }
+
+  subscribe() {
+    this.setState({login: false});
+  }
+
+  switchLogin() {
+    this.setState({login: true});
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <div className="header">
+          <div className="logo">
+            Task Manager
+          </div>
+
+          <div className="action">
+            <ul>
+              <li><FontAwesomeIcon icon={faTimes} onClick={this.closeApp} /></li>
+            </ul>
+          </div>
         </div>
 
-        <div className="action">
-          <ul>
-            <li><FontAwesomeIcon icon={faTimes} onClick={CloseApp} /></li>
-          </ul>
-        </div>
+        {this.state.loginID == 0 && this.state.login &&
+          <Login parent={this}></Login>
+        }
+
+        {this.state.loginID == 0 && ! this.state.login &&
+          <Subscribe parent={this}></Subscribe>
+        }
+
+        {this.state.loginID != 0 &&
+          <Servers parent={this} user_id={this.state.loginID}></Servers>
+        }
+
+        {this.state.loginID != 0 &&
+          <div className="wrap">
+            <Home ref={this.home}></Home>
+          </div>
+        }
+
       </div>
+    );
+  }
 
-      {loginID == 0 &&
-        <Login setLoginID={SetLoginID}></Login>
-      }
-
-      {loginID != 0 &&
-        <Servers switch={Switch}></Servers>
-      }
-
-      {loginID != 0 &&
-        <div className="wrap">
-          <Home ref={home}></Home>
-        </div>
-      }
-
-    </div>
-  );
 }
+
 
 export default App;

@@ -21,6 +21,25 @@ class Modal extends React.Component {
     e.stopPropagation();
   }
 
+  join = (e) => {
+    const form = new FormData();
+    form.append('url', this.refs.url.value);
+    form.append('token', this.refs.token.value);
+    form.append('user_id', this.props.user_id)
+
+    fetch('http://127.0.0.1/api-mysql/join', {
+      method: 'POST',
+      body: form,
+      mode: 'cors'
+    })
+    .then(res => res.json())
+    .then(
+      (result) => {
+        this.props.parent.addedServer(result);
+        this.setState({display: 'none'});
+      });
+  }
+
   render() {
      return (
        <div className="modal-background" onClick={this.closeModal} style={this.state}>
@@ -33,16 +52,16 @@ class Modal extends React.Component {
             <form>
               <div className="form-element">
                 <label htmlFor="private-key">URL du site</label>
-                <input type="text" />
+                <input type="text" ref="url" />
               </div>
 
               <div className="form-element">
                 <label htmlFor="private-key">Votre clé privée</label>
-                <input type="text" />
+                <input type="text"  ref="token" />
               </div>
 
               <div className="align-right">
-                <button type="submit">Rejoindre</button>
+                <button type="submit" onClick={this.join}>Rejoindre</button>
               </div>
             </form>
           </div>
