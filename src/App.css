@@ -87,7 +87,8 @@ button:hover {
 }
 
 .modal {
-  width: 60%;
+  width: 100%;
+  max-width: 50%;
   min-height: 50%;
   background-color: #fff;
   border-radius: 5px 5px 5px 5px;
@@ -126,6 +127,12 @@ button:hover {
   height: 18px;
   display: flex;
   padding: 5px;
+  -webkit-app-region: drag;
+}
+
+.header ul {
+  display: flex;
+  -webkit-app-region: none;
 }
 
 .header .logo {
@@ -133,7 +140,12 @@ button:hover {
   color: #72767d;
 }
 
-.header .action .fa-times:hover {
+.header .action svg {
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+.header .action svg:hover {
   cursor: pointer;
 }
 

@@ -9,7 +9,7 @@ import Login from './Login';
 import Subscribe from './Subscribe';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faSquare, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 const electron = window.require("electron")
 var remote = electron.remote
@@ -28,6 +28,15 @@ class App extends React.Component {
 
   closeApp() {
     electron.remote.getCurrentWindow().close();
+  }
+
+  fullscreen() {
+    if (electron.remote.getCurrentWindow().isMaximized()) {
+      electron.remote.getCurrentWindow().unmaximize();
+
+    } else {
+      electron.remote.getCurrentWindow().maximize();
+    }
   }
 
   switch(id, url, name) {
@@ -56,6 +65,7 @@ class App extends React.Component {
 
           <div className="action">
             <ul>
+              <li><FontAwesomeIcon icon={faSquare} onClick={this.fullscreen} /></li>
               <li><FontAwesomeIcon icon={faTimes} onClick={this.closeApp} /></li>
             </ul>
           </div>
