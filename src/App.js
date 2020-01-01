@@ -5,6 +5,7 @@ import './reset.css';
 import './App.css';
 import Servers from './Servers';
 import Home from './Home';
+import Login from './Login';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -18,9 +19,14 @@ function CloseApp() {
 var id = 0;
 var url = "";
 var home = React.createRef();
+var loginID = 0;
 
 function Switch(idToSwitch, urlToSwitch, name) {
   home.current.load(idToSwitch, urlToSwitch, name);
+}
+
+function SetLoginID(id) {
+  loginID = id;
 }
 
 function App() {
@@ -37,11 +43,21 @@ function App() {
           </ul>
         </div>
       </div>
-      <Servers switch={Switch}></Servers>
 
-      <div className="wrap">
-        <Home ref={home}></Home>
-      </div>
+      {loginID == 0 &&
+        <Login setLoginID={SetLoginID}></Login>
+      }
+
+      {loginID != 0 &&
+        <Servers switch={Switch}></Servers>
+      }
+
+      {loginID != 0 &&
+        <div className="wrap">
+          <Home ref={home}></Home>
+        </div>
+      }
+
     </div>
   );
 }
