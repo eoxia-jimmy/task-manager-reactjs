@@ -11,6 +11,9 @@ import Subscribe from './Subscribe';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquare, faTimes } from '@fortawesome/free-solid-svg-icons'
 
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+
 const electron = window.require("electron")
 var remote = electron.remote
 
@@ -21,7 +24,7 @@ class App extends React.Component {
     this.home = React.createRef();
 
     this.state = {
-      loginID: 0,
+      loginID: cookies.get('loginID') ? cookies.get('loginID') : 0,
       login: true
     };
   }
@@ -45,6 +48,8 @@ class App extends React.Component {
 
   setLoginID(id) {
     this.setState({loginID: id});
+
+    cookies.set('loginID', id, { path: '/' });
   }
 
   subscribe() {
