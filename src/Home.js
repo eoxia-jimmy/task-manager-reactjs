@@ -1,5 +1,5 @@
 import React from 'react';
-import Tasks from './Tasks';
+import Projects from './Projects';
 
 
 class Home extends React.Component {
@@ -37,7 +37,7 @@ class Home extends React.Component {
 
         <div className="wrap-content">
           {this.state.id != 0 &&
-            <Tasks ref={this.task} key={this.state.id} url={this.state.url}></Tasks>
+            <Projects ref={this.task} key={this.state.id} url={this.state.url}></Projects>
           }
         </div>
       </div>
