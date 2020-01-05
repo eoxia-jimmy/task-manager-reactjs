@@ -61,7 +61,6 @@ class App extends React.Component {
   }
 
   closeDropdown(e) {
-    console.log(this);
     this.server.current.closeDropdown();
   }
 
