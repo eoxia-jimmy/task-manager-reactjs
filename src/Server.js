@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip'
 
+
 class Server extends React.Component {
   constructor(props) {
     super(props);
+
 
     this.state = {
       classDropdown: 'server wpeo-dropdown'
@@ -32,6 +34,18 @@ class Server extends React.Component {
     return false;
   }
 
+  openModalLeaveServer = (title, e) => {
+    var content = (
+      <p className="description">Tu es sûr(e) de vouloir quitter <b>{title}</b> ?</p>
+    );
+
+    var dataConfirm = {
+      id: this.props.data.id
+    };
+
+    this.props.servers_parent.openModalLeaveServer("Quitter '" + title + "'", content, dataConfirm, e);
+  };
+
   render() {
      return (
        <div className={this.state.classDropdown}
@@ -45,9 +59,10 @@ class Server extends React.Component {
 
          <ul className="dropdown-content" onClick={this.prevent}>
            <div>
-             <li className="dropdown-item">Quitter le serveur</li>
+             <li className="dropdown-item" onClick={this.openModalLeaveServer.bind(this, this.props.data.name)}>Quitter le serveur</li>
            </div>
          </ul>
+
        </div>
      );
   }

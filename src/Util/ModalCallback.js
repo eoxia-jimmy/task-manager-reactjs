@@ -24,13 +24,16 @@ class ModalCallback extends React.Component {
   render() {
      return (
        <div className="modal-background" onClick={this.closeModal} style={this.state}>
-        <div className="modal" onClick={this.preventCloseModal}>
+        <div className="modal w300" onClick={this.preventCloseModal}>
           <div className="modal-header">
             <h2>{this.props.title}</h2>
           </div>
           <div className="modal-content">
+            {this.props.content}
           </div>
-          <div className="modal-footer">
+          <div className="modal-footer align-right">
+            <button onClick={this.props.cancel} type="submit">Annuler</button>
+            <button onClick={this.props.confirm.bind(this, this.props.dataConfirm)} className="red" type="submit">Quitter le serveur</button>
           </div>
         </div>
       </div>

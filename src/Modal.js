@@ -22,6 +22,7 @@ class Modal extends React.Component {
   }
 
   join = (e) => {
+    e.preventDefault();
     const form = new FormData();
     form.append('url', this.refs.url.value);
     form.append('token', this.refs.token.value);
