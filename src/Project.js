@@ -8,6 +8,7 @@ import { faAngleRight, faAngleDown } from '@fortawesome/free-solid-svg-icons'
 class Project extends React.Component {
   constructor(props) {
     super(props);
+
     this.contentEditable = React.createRef();
     this.task = React.createRef();
 
@@ -20,7 +21,6 @@ class Project extends React.Component {
     };
 
     this.faIcon = faAngleRight;
-
   }
 
   handleChange = evt => {
@@ -67,8 +67,13 @@ class Project extends React.Component {
        		</div>
 
        		<div className="table-cell table-300 project-name">
-       			<div className="table-cell-container project-title" contentEditable="true">
-       				{data.title}
+       			<div className="table-cell-container project-title">
+              <ContentEditable
+                innerRef={this.contentEditable}
+                html={this.state.html} // innerHTML of the editable div
+                disabled={false}       // use true to disable editing
+                onChange={this.handleChange} // handle innerHTML change
+                tagName='div' />
        			</div>
        		</div>
 
@@ -132,7 +137,7 @@ class Project extends React.Component {
        	</div>
 
         <div style={this.state}>
-          <Tasks ref={this.task} project_id={data.id} url={this.props.url}></Tasks>
+          <Tasks ref={this.task} project_id={data.id} url={this.props.url} user_id={this.props.user_id}></Tasks>
         </div>
        </div>
      );

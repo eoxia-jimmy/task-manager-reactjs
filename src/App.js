@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import logo from './logo.svg';
 import './reset.css';
 import './App.css';
@@ -22,6 +21,7 @@ class App extends React.Component {
     super(props);
 
     this.home = React.createRef();
+    this.server = React.createRef();
 
     this.state = {
       loginID: cookies.get('loginID') ? cookies.get('loginID') : 0,
@@ -60,9 +60,14 @@ class App extends React.Component {
     this.setState({login: true});
   }
 
+  closeDropdown(e) {
+    console.log(this);
+    this.server.current.closeDropdown();
+  }
+
   render() {
     return (
-      <div className="App">
+      <div className="App" onClick={this.closeDropdown.bind(this)}>
         <div className="header">
           <div className="logo">
             Task Manager
@@ -85,12 +90,12 @@ class App extends React.Component {
         }
 
         {this.state.loginID != 0 &&
-          <Servers parent={this} user_id={this.state.loginID}></Servers>
+          <Servers ref={this.server} parent={this} user_id={this.state.loginID}></Servers>
         }
 
         {this.state.loginID != 0 &&
           <div className="wrap">
-            <Home ref={this.home}></Home>
+            <Home ref={this.home} user_id={this.state.loginID}></Home>
           </div>
         }
 

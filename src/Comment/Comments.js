@@ -107,14 +107,15 @@ class Comments extends React.Component {
     }
   };
 
-  createPoint = evt => {
+  createComment = evt => {
     var html = this.state.html;
 
     const form = new FormData();
-    form.append('post_id', this.props.id);
+    form.append('post_id', this.props.project_id);
+    form.append('parent_id', this.props.task_id);
     form.append('content', html.new.content);
 
-    fetch(this.props.url + "wp-json/task_manager/v1/point/", {
+    fetch(this.props.url + "wp-json/task_manager/v1/comment/", {
       method: 'POST',
       body: form,
       mode: 'cors'
@@ -152,6 +153,8 @@ class Comments extends React.Component {
      } else {
        return (
          <div className="column-extend">
+          <button type="submit" onClick={this.createComment}>New Comment</button>
+
            <div class="wpeo-table table-flex table-comments">
              <div class="table-row table-header">
                <div class="table-cell">Commentaire</div>

@@ -19,7 +19,7 @@ class Points extends React.Component {
       items: [],
       html: {
         new: {
-          content: "New Point",
+          content: "New Task",
           id: 0,
         }
       }
@@ -27,7 +27,7 @@ class Points extends React.Component {
   }
 
   componentDidMount() {
-    fetch(this.props.url + "wp-json/task_manager/v1/points/" + this.props.id)
+    fetch(this.props.url + "wp-json/task_manager/v1/points/" + this.props.project_id)
       .then(res => res.json())
       .then(
         (result) => {
@@ -109,7 +109,8 @@ class Points extends React.Component {
     var html = this.state.html;
 
     const form = new FormData();
-    form.append('post_id', this.props.id);
+    form.append('post_id', this.props.project_id);
+    form.append('author_id', this.props.user_id);
     form.append('content', html.new.content);
 
     fetch(this.props.url + "wp-json/task_manager/v1/point/", {
@@ -174,7 +175,7 @@ class Points extends React.Component {
               <ul className="point-container">
                 <li className="point-valid">
                 {item.data.id}
-                
+
                 <input type="checkbox" /></li>
                 <li className="point-content" onClick={this.openComment}>
                   <ContentEditable
@@ -190,7 +191,7 @@ class Points extends React.Component {
                 </li>
               </ul>
 
-              <Comments ref={this.comment} url={this.props.url} parent_id={this.props.id} id={item.data.id}></Comments>
+              <Comments ref={this.comment} url={this.props.url} user_id={this.props.user_id} project_id={this.props.project_id} parent_id={this.props.id} id={item.data.id}></Comments>
             </div>
           ))}
           </div>

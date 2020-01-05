@@ -31,13 +31,13 @@ class Home extends React.Component {
           <h2>{this.state.name}</h2>
 
           {this.state.id != 0 &&
-            <button type="submit" onClick={this.createTask}>New Task</button>
+            <button type="submit" onClick={this.createTask}>New Project</button>
           }
         </div>
 
         <div className="wrap-content">
           {this.state.id != 0 &&
-            <Projects ref={this.task} key={this.state.id} url={this.state.url}></Projects>
+            <Projects ref={this.task} key={this.state.id} url={this.state.url} user_id={this.props.user_id}></Projects>
           }
         </div>
       </div>

@@ -4,7 +4,7 @@ import ContentEditable from 'react-contenteditable'
 import Comments from './../Comment/Comments'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { faAngleRight, faAngleDown } from '@fortawesome/free-solid-svg-icons'
 
 class Task extends React.Component {
   constructor(props) {
@@ -16,8 +16,11 @@ class Task extends React.Component {
       error: null,
       isLoaded: false,
       data: this.props.data,
-      html: this.props.data.title
+      html: this.props.data.title,
+      display: 'none'
     };
+
+    this.faIcon = faAngleRight;
   }
 
   /*handleChange = evt => {
@@ -40,7 +43,15 @@ class Task extends React.Component {
   };*/
 
   loadComments = evt => {
-    this.comments.current.load();
+    if (this.faIcon == faAngleRight) {
+      this.comments.current.load();
+
+      this.setState({display: 'block'});
+      this.faIcon = faAngleDown;
+    } else {
+      this.setState({display: 'none'});
+      this.faIcon = faAngleRight;
+    }
   };
 
   render() {
@@ -52,7 +63,7 @@ class Task extends React.Component {
        	<div className="table-row">
        		<div className="table-cell table-25" onClick={this.loadComments}>
        			<div className="table-cell-container">
-       				<FontAwesomeIcon icon={faAngleRight} />
+       				<FontAwesomeIcon icon={this.faIcon} />
        			</div>
        		</div>
 
@@ -128,7 +139,9 @@ class Task extends React.Component {
        		</div>
        	</div>
 
-        <Comments ref={this.comments} url={this.props.url} project_id={this.props.project_id} task_id={data.id}></Comments>
+        <div style={this.state}>
+          <Comments ref={this.comments} url={this.props.url} project_id={this.props.project_id} project_id={this.props.project_id} task_id={data.id} user_id={this.props.user_id}></Comments>
+        </div>
        </div>
      );
   }

@@ -106,11 +106,12 @@ class Tasks extends React.Component {
     }
   };
 
-  createPoint = evt => {
+  createTask = evt => {
     var html = this.state.html;
 
     const form = new FormData();
-    form.append('post_id', this.props.id);
+    form.append('post_id', this.props.project_id);
+    form.append('author_id', this.props.user_id);
     form.append('content', html.new.content);
 
     fetch(this.props.url + "wp-json/task_manager/v1/point/", {
@@ -151,6 +152,8 @@ class Tasks extends React.Component {
      } else {
        return (
          <div className="column-extend">
+          <button type="submit" onClick={this.createTask}>New Task</button>
+
            <div className="wpeo-table table-flex table-task">
            	<div className="table-row table-header">
            		<div className="table-cell table-25"></div>
@@ -168,7 +171,7 @@ class Tasks extends React.Component {
            	</div>
 
             {items.map((item, key) => (
-              <Task key={item.data.id} data={item.data} url={this.props.url} project_id={this.props.project_id} task_id={item.data.id}></Task>
+              <Task key={item.data.id} data={item.data} url={this.props.url} project_id={this.props.project_id} task_id={item.data.id} user_id={this.props.user_id}></Task>
             ))}
            </div>
          </div>

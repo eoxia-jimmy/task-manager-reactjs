@@ -4,6 +4,8 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import Modal from './Modal';
 import ReactTooltip from 'react-tooltip'
 
+import Server from './Server';
+
 class Servers extends React.Component {
   constructor(props) {
     super(props);
@@ -11,7 +13,8 @@ class Servers extends React.Component {
     this.state = {
       error: null,
       isLoaded: false,
-      items: []
+      items: [],
+      keys: {}
     };
   }
 
@@ -20,13 +23,20 @@ class Servers extends React.Component {
       .then(res => res.json())
       .then(
         (result) => {
-          console.log(result);
           if (!Array.isArray(result)) {
             result = [result];
           }
+
+          var keys = this.state['keys'];
+
+          for (var item in result) {
+            keys['server-' + result[item].id] = React.createRef()
+          }
+
           this.setState({
             isLoaded: true,
-            items: result
+            items: result,
+            keys: keys
           });
         },
         (error) => {
@@ -43,9 +53,7 @@ class Servers extends React.Component {
     this.refs.modal.openModal();
   };
 
-  switch = (id, url, name, e) => {
-    this.props.parent.switch(id, url, name);
-  }
+
 
   addedServer = (data) => {
     var items = this.state.items;
@@ -54,8 +62,16 @@ class Servers extends React.Component {
     this.setState({items: items});
   };
 
+  closeDropdown() {
+    var keys = this.state['keys'];
+    for (var item in keys) {
+      keys[item].current.closeDropdown();
+    }
+  }
+
+
   render() {
-    const { error, isLoaded, items } = this.state;
+    const { error, isLoaded, items, keys } = this.state;
      if (error) {
        return <div>Erreur : {error.message}</div>;
      } else if (!isLoaded) {
@@ -66,9 +82,7 @@ class Servers extends React.Component {
          <nav>
           <div className="servers">
           {this.state.items.map((item, key) => (
-            <div className="server" key={item.id} url={item.url} data-tip={item.name} onClick={this.switch.bind(this, item.id, item.url, item.name)}>
-              <img src={item.url_image} />
-            </div>
+            <Server ref={keys['server-' + item.id]} parent={this.props.parent} data={item}></Server>
           ))}
             <div className="server add" onClick={this.openModal}>
               <FontAwesomeIcon icon={faPlus} />

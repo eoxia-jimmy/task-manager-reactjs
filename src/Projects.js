@@ -4,6 +4,7 @@ import Project from './Project';
 class Projects extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       error: null,
       isLoaded: false,
@@ -18,7 +19,8 @@ class Projects extends React.Component {
 
   createTask() {
     const form = new FormData();
-    form.append('title', 'New Task');
+    form.append('title', 'New Project');
+    form.append('author_id', this.props.user_id);
 
     fetch(this.props.url + "wp-json/task_manager/v1/task/", {
       method: 'POST',
@@ -28,7 +30,12 @@ class Projects extends React.Component {
     .then(res => res.json())
     .then(
       (result) => {
-        console.log(result);
+        var tmp = this.state.items;
+        tmp.unshift(result);
+
+        this.setState({
+          items: tmp
+        });
       });
   }
 
@@ -37,7 +44,6 @@ class Projects extends React.Component {
       .then(res => res.json())
       .then(
         (result) => {
-          console.log(result);
           if (!Array.isArray(result)) {
             result = [result];
           }
@@ -82,7 +88,7 @@ class Projects extends React.Component {
          	</div>
 
             {items.map((item, key) => (
-              <Project key={item.data.id} data={item.data} url={this.props.url}></Project>
+              <Project key={item.data.id} data={item.data} url={this.props.url} user_id={this.props.user_id}></Project>
             ))}
           </div>
        );
