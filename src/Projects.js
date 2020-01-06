@@ -20,12 +20,15 @@ class Projects extends React.Component {
   createTask() {
     const form = new FormData();
     form.append('title', 'New Project');
-    form.append('author_id', this.props.user_id);
+    form.append('author_id', this.props.wp_user_id);
 
     fetch(this.props.url + "wp-json/task_manager/v1/task/", {
       method: 'POST',
       body: form,
-      mode: 'cors'
+      mode: 'cors',
+      headers: new Headers({
+          'wpapikey': this.props.token
+       }),
     })
     .then(res => res.json())
     .then(
@@ -40,17 +43,25 @@ class Projects extends React.Component {
   }
 
   load() {
-    fetch(this.props.url + "wp-json/task_manager/v1/task")
+    fetch(this.props.url + "wp-json/task_manager/v1/task", {
+      method: 'GET',
+      headers: new Headers({
+        'wpapikey': this.props.token
+     }),
+     mode: 'cors'
+    })
       .then(res => res.json())
       .then(
         (result) => {
-          if (!Array.isArray(result)) {
-            result = [result];
+          if (!result.code) {
+            if (!Array.isArray(result)) {
+              result = [result];
+            }
+            this.setState({
+              isLoaded: true,
+              items: result
+            });
           }
-          this.setState({
-            isLoaded: true,
-            items: result
-          });
         },
         (error) => {
           this.setState({

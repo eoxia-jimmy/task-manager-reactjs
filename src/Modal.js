@@ -5,7 +5,8 @@ class Modal extends React.Component {
     super(props);
 
     this.state = {
-      display: "none"
+      display: "none",
+      errorMessage: ""
     };
   }
 
@@ -24,11 +25,12 @@ class Modal extends React.Component {
   join = (e) => {
     e.preventDefault();
     const form = new FormData();
+    form.append('action', 'join');
     form.append('url', this.refs.url.value);
     form.append('token', this.refs.token.value);
     form.append('user_id', this.props.user_id)
 
-    fetch('http://127.0.0.1/api-mysql/join', {
+    fetch('http://127.0.0.1/api-mysql/api.php', {
       method: 'POST',
       body: form,
       mode: 'cors'
@@ -36,8 +38,23 @@ class Modal extends React.Component {
     .then(res => res.json())
     .then(
       (result) => {
-        this.props.parent.addedServer(result);
-        this.setState({display: 'none'});
+        if (!result.status) {
+          if (result.error == "EMPTY_USER_OR_URL_OR_TOKEN") {
+            this.setState({errorMessage: "Empty user or url or token"});
+          } else if (result.error == "CURL_TIMEOUT" ) {
+            this.setState({errorMessage: "URL not founded"});
+          }
+          else if (result.error == "ALREADY_JOINED") {
+            this.setState({errorMessage: "Already joined"});
+          }
+          else if (result.error == "FORBIDDEN") {
+            this.setState({errorMessage: "Token invalid"});
+          }
+
+        } else {
+          this.props.parent.addedServer(result.data);
+          this.setState({display: 'none'});
+        }
       });
   }
 
@@ -50,6 +67,10 @@ class Modal extends React.Component {
           </div>
           <div className="modal-content">
             <p className="description">Pour rejoindre un serveur, veuillez renseigner l'URL du serveur et la clé privée assigné à votre compte utilisateur.</p>
+            {this.state.errorMessage != "" &&
+              <p>{this.state.errorMessage}</p>
+            }
+
             <form>
               <div className="form-element">
                 <label htmlFor="private-key">URL du site</label>

@@ -27,25 +27,27 @@ class Servers extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://127.0.0.1/api-mysql/servers.php?user_id=" + this.props.user_id)
+    fetch("http://127.0.0.1/api-mysql/api.php?action=servers&user_id=" + this.props.user_id)
       .then(res => res.json())
       .then(
         (result) => {
-          if (!Array.isArray(result)) {
-            result = [result];
+          if (result.status) {
+            if (!Array.isArray(result.data) && result.data != null) {
+              result.data = [result.data];
+            }
+
+            var keys = this.state['keys'];
+
+            for (var item in result.data) {
+              keys['server-' + result.data[item].id] = React.createRef()
+            }
+
+            this.setState({
+              isLoaded: true,
+              items: result.data != null ? result.data : [],
+              keys: keys
+            });
           }
-
-          var keys = this.state['keys'];
-
-          for (var item in result) {
-            keys['server-' + result[item].id] = React.createRef()
-          }
-
-          this.setState({
-            isLoaded: true,
-            items: result,
-            keys: keys
-          });
         },
         (error) => {
           this.setState({
@@ -98,10 +100,11 @@ class Servers extends React.Component {
 
   leaveServerConfirmCallback = (dataConfirm, e) => {
     const form = new FormData();
+    form.append('action', 'leave');
     form.append('id', dataConfirm.id);
     form.append('user_id', this.props.user_id)
 
-    fetch('http://127.0.0.1/api-mysql/leave', {
+    fetch('http://127.0.0.1/api-mysql/api.php', {
       method: 'POST',
       body: form,
       mode: 'cors'
@@ -145,9 +148,16 @@ class Servers extends React.Component {
 
          <nav>
           <div className="servers">
-          {this.state.items.map((item, key) => (
-            <Server ref={keys['server-' + item.id]} servers_parent={this} parent={this.props.parent} data={item}></Server>
-          ))}
+
+          {this.state.items != null &&
+            this.state.items.map((item, key) => (
+              <Server ref={keys['server-' + item.id]}
+                servers_parent={this}
+                parent={this.props.parent}
+                data={item}
+                wp_user_id={item.wp_user_id}
+                token={item.token}></Server>
+            ))}
             <div className="server add" onClick={this.openModal}>
               <FontAwesomeIcon icon={faPlus} />
             </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import md5 from "react-native-md5";
 
 class Subscribe extends React.Component {
   constructor(props) {
@@ -18,31 +19,6 @@ class Subscribe extends React.Component {
     e.stopPropagation();
   }
 
-  connect = (e) => {
-    e.preventDefault();
-    const form = new FormData();
-    form.append('username', this.refs.pseudo.value);
-    form.append('password', this.refs.password.value);
-
-    fetch('http://127.0.0.1/api-mysql/login.php', {
-      method: 'POST',
-      body: form,
-      mode: 'cors'
-    })
-    .then(res => res.json())
-    .then(
-      (result) => {
-        if (!result) {
-          this.setState({errorMessage: "Identifiant erronée"});
-        } else {
-          this.props.parent.setLoginID(result.id);
-
-        }
-      });
-
-      return false;
-  }
-
   goLogin = (e) => {
     this.props.parent.switchLogin();
   }
@@ -50,11 +26,12 @@ class Subscribe extends React.Component {
   subscribe = (e) => {
     e.preventDefault();
     const form = new FormData();
+    form.append('action', 'subscribe');
     form.append('email', this.refs.email.value);
     form.append('username', this.refs.username.value);
-    form.append('password', this.refs.password.value);
+    form.append('password', md5.b64_md5(this.refs.password.value));
 
-    fetch('http://127.0.0.1/api-mysql/subscribe.php', {
+    fetch('http://127.0.0.1/api-mysql/api.php', {
       method: 'POST',
       body: form,
       mode: 'cors'
@@ -62,9 +39,18 @@ class Subscribe extends React.Component {
     .then(res => res.json())
     .then(
       (result) => {
-        if (!result) {
+        if (!result.status) {
+          if (result.error == "EMPTY_EMAIL_OR_USERNAME_PASSWORD") {
+            this.setState({errorMessage: 'Empty email or username or password'});
+          }
+          else if (result.error == "EMAIL_INVALID") {
+            this.setState({errorMessage: 'Email invalid'});
+          }
+          else if(result.error == 23000) {
+            this.setState({errorMessage: 'Email already used'});
+          }
         } else {
-          this.props.parent.setLoginID(result);
+          this.props.parent.setLoginID(result.data);
         }
       });
 
@@ -79,6 +65,10 @@ class Subscribe extends React.Component {
             <h2>Créer un compte</h2>
           </div>
           <div className="modal-content">
+            {this.state.errorMessage != "" &&
+              <p>{this.state.errorMessage}</p>
+            }
+
             <form>
               <div className="form-element">
                 <label htmlFor="private-key">Email</label>

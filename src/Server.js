@@ -12,9 +12,9 @@ class Server extends React.Component {
     };
   }
 
-  switch = (id, url, name, e) => {
+  switch = (id, url, name, wp_user_id, token, e) => {
     if (e.type === 'click') {
-      this.props.parent.switch(id, url, name);
+      this.props.parent.switch(id, url, name, wp_user_id, token);
     }
   }
 
@@ -52,7 +52,7 @@ class Server extends React.Component {
           key={this.props.data.id}
           url={this.props.data.url}
           data-tip={this.props.data.name}
-          onClick={this.switch.bind(this, this.props.data.id, this.props.data.url, this.props.data.name)}>
+          onClick={this.switch.bind(this, this.props.data.id, this.props.data.url, this.props.data.name, this.props.data.wp_user_id, this.props.data.token)}>
          <div className="dropdown-toggle"
           onContextMenu={this.openDropdown}
           onClick={this.openDropdown}><img src={this.props.data.url_image} /></div>

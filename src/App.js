@@ -42,8 +42,8 @@ class App extends React.Component {
     }
   }
 
-  switch(id, url, name) {
-    this.home.current.load(id, url, name);
+  switch(id, url, name, wp_user_id, token) {
+    this.home.current.load(id, url, name, wp_user_id, token);
   }
 
   setLoginID(id) {

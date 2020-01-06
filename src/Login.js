@@ -1,4 +1,5 @@
 import React from 'react';
+import md5 from "react-native-md5";
 
 class Login extends React.Component {
   constructor(props) {
@@ -21,10 +22,11 @@ class Login extends React.Component {
   connect = (e) => {
     e.preventDefault();
     const form = new FormData();
-    form.append('username', this.refs.pseudo.value);
-    form.append('password', this.refs.password.value);
+    form.append('action', 'login');
+    form.append('email', this.refs.pseudo.value);
+    form.append('password', md5.b64_md5(this.refs.password.value));
 
-    fetch('http://127.0.0.1/api-mysql/login.php', {
+    fetch('http://127.0.0.1/api-mysql/api.php', {
       method: 'POST',
       body: form,
       mode: 'cors'
@@ -32,11 +34,17 @@ class Login extends React.Component {
     .then(res => res.json())
     .then(
       (result) => {
-        if (!result) {
-          this.setState({errorMessage: "Identifiant erronée"});
-        } else {
-          this.props.parent.setLoginID(result.id);
 
+        if (!result.status) {
+          if (result.error == "EMPTY_EMAIL_OR_PASSWORD") {
+            this.setState({errorMessage: "Empty email or password"});
+          } else if (result.error == "EMAIL_OR_PASSWORD_INCORRECT"){
+            this.setState({errorMessage: "Email or password incorrect"});
+          } else {
+            this.setState({errorMessage: "Unknow error"});
+          }
+        } else {
+          this.props.parent.setLoginID(result.data.id);
         }
       });
 
@@ -58,7 +66,7 @@ class Login extends React.Component {
             <p className="description">Bon retour parmis nous!</p>
 
             {this.state.errorMessage != "" &&
-              <p>Identifiant erroné</p>
+              <p>{this.state.errorMessage}</p>
             }
             <form>
               <div className="form-element">
